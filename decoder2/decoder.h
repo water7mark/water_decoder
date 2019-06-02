@@ -28,7 +28,7 @@
 const std::string embedfile("C:/Users/youhei/Desktop/research_all/research_data/m1_try00_embednum16x9.txt");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string basis_read_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/ver1/ver1_1/xxx_ver1_1.mp4");
+const std::string basis_read_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/ver1/ver1_1/daad_xxx_ver1_1_12M.mp4");
 const std::string basis_write_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/test/xxx_ver1_1.csv");
 const int m = 20;
 const int delta = 1;
@@ -38,7 +38,7 @@ const int block_height = 8;//1ブロックの縦幅
 const int  BG_width = 16; //1ブロック群のブロック個数（横）
 const int BG_height = 9; //1ブロック群のブロック個数（縦）
 
-const std::string write_file_ex("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/make_data/make_data_xxx_ver1_1_mponly.csv");
+const std::string basis_write_file_ex("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/make_data/make_data_daad_xxx_ver1_1_12M.csv");
 
 
 // add

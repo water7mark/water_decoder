@@ -6,8 +6,9 @@ int main(int argc, char *argv[])
 		// initilize
 		std::string read_file = basis_read_file;
 		std::string write_file = basis_write_file;
+		std::string write_file_ex = basis_write_file_ex;
 
-		change_filename(read_file, write_file, now_loop);
+		change_filename(read_file, write_file, now_loop, write_file_ex);
 
 		log_write(read_file, write_file);
 		str_checker(read_file, write_file);
