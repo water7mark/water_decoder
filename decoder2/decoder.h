@@ -25,20 +25,19 @@
 
 
 
-const std::string embedfile("C:/Users/youhei/Desktop/research_all/research_data/m1_try00_embednum16x9.txt");
+const std::string embedfile("C:/Users/youhei/Desktop/research_all/research_data/m2_embednum16x9_one16.txt");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string basis_read_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/ver1/ver1_1/daad_xxx_ver1_1_12M.mp4");
-const std::string basis_write_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/test/xxx_ver1_1.csv");
+const std::string basis_read_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/sync/sync_sinki/bitrate/daad_YYM_sync_sinki_299insert_xxx_d5.mp4");
+const std::string basis_write_file("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/sync/sync_sinki/bitrate/daad_YYM_sync_sinki_299insert_xxx_d5.csv");
 const int m = 20;
-const int delta = 1;
+const int delta = 5;
 const int  block_width = 8;//1ブロックの横幅
 const int block_height = 8;//1ブロックの縦幅
 
 const int  BG_width = 16; //1ブロック群のブロック個数（横）
 const int BG_height = 9; //1ブロック群のブロック個数（縦）
 
-const std::string basis_write_file_ex("c:/users/youhei/desktop/research_all/research_data/mp4_embedded_videos/make_data/make_data_daad_xxx_ver1_1_12M.csv");
 
 
 // add
@@ -52,14 +51,13 @@ void init_decoder(cv::VideoCapture* cap, std::vector<char>* embed, cv::Size* siz
 std::vector<char> set_embeddata(const std::string filename);
 cv::VideoCapture capture_open(const std::string read_file);
 cv::Mat filter(cv::Mat luminance);
-void decoding(std::vector<cv::Mat> luminance, std::vector<char>* decode, int m, int delta, std::ofstream& ofs2, const std::vector<char>& embed);
+void decoding(std::vector<cv::Mat> luminance, std::vector<char>* decode, int m, int delta, const std::vector<char>& embed);
 bool is_less_than(float i);
-void make_graph(std::ofstream& ofs, std::vector<size_t>& n_count, std::vector<std::vector<int>>(&sumall));
 
 
 //common
 
 bool overwrite_check(std::string write_file);
-void change_filename(std::string& read_file, std::string& write_file, int loop_count, std::string &write_file_ex);
+void change_filename(std::string& read_file, std::string& write_file, int loop_count, int now_loop2);
 
 #endif

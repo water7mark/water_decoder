@@ -74,37 +74,46 @@ bool overwrite_check(std::string write_file) {
 }
 
 
-void change_filename(std::string& read_file, std::string& write_file, int loop_count, std::string& write_file_ex) {
+void change_filename(std::string& read_file, std::string& write_file, int loop_count, int now_loop2) {
 	const std::string mp4_read_array[5] = { "basket","library", "lego", "walk1", "walk2" };
 	const std::string read_array[5] = { "basket" , "library" , "lego", "walk1", "walk2" };
 	const std::string write_array[5] = { "basket" , "library" , "lego", "walk1", "walk2" };
 	int change_point = 0;
 	int check_num = 0;
 
+
+
+	const std::string bit_array[5] = {"2", "4", "6", "8", "12"};
+	int change_point2 = 0;
+
 	// read_fileの名前を動画に応じて変更
 	change_point = (int)read_file.find("xxx");
 	read_file.replace(change_point, 3, mp4_read_array[loop_count - 1]);
 
-	check_num = (int)read_file.rfind("ver");
-	if (read_file[check_num + 5] - '0' != delta) {
-		std::cout << "error: miss type:: read_file is wrong" << read_file << std::endl;
-		getchar();
-		exit(0);
-	}
+	change_point2 = (int)read_file.find("YY");
+	read_file.replace(change_point2, 2, bit_array[now_loop2-1]);
+
+	////check_num = (int)read_file.rfind("ver");
+	////if (read_file[check_num + 5] - '0' != delta) {
+	////	std::cout << "error: miss type:: read_file is wrong" << read_file << std::endl;
+	////	getchar();
+	////	exit(0);
+	////}
 
 	// write_fileの名前を動画に応じて変更
 	change_point = (int)write_file.find("xxx");
 	write_file.replace(change_point, 3, read_array[loop_count - 1]);
 
-	check_num = (int)write_file.rfind("ver");
-	if (write_file[check_num + 5] - '0' != delta) {
-		std::cout << "error: miss type:: write_file is wrong" << write_file << std::endl;
-		getchar();
-		exit(0);
-	}
 
-	change_point = (int)write_file_ex.find("xxx");
-	write_file_ex.replace(change_point, 3, write_array[loop_count - 1]);
 
+	change_point2 = (int)write_file.find("YY");
+	write_file.replace(change_point2, 2, bit_array[now_loop2 - 1]);
+
+	//check_num = (int)write_file.rfind("ver");
+	//if (write_file[check_num + 5] - '0' != delta) {
+	//	std::cout << "error: miss type:: write_file is wrong" << write_file << std::endl;
+	//	getchar();
+	//	exit(0);
+	//}
 
 }

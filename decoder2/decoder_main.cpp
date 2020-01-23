@@ -6,9 +6,8 @@ int main(int argc, char *argv[])
 		// initilize
 		std::string read_file = basis_read_file;
 		std::string write_file = basis_write_file;
-		std::string write_file_ex = basis_write_file_ex;
 
-		change_filename(read_file, write_file, now_loop, write_file_ex);
+		change_filename(read_file, write_file, now_loop, now_loop2);
 
 		log_write(read_file, write_file);
 		str_checker(read_file, write_file);
@@ -26,8 +25,6 @@ int main(int argc, char *argv[])
 		int framenum;
 		cv::Size size;
 
-		// 臨時で追加(n_countを出力)
-		std::ofstream ofs2(write_file_ex);
 
 		// 得られた復号ビットをすべて格納する(900*埋め込み透かしビットをm個に分ける)  ()
 		std::vector<std::vector<std::vector<int>>> all_bit_array(m, std::vector<std::vector<int>>(1, std::vector<int>(DECODER_BIT)));
@@ -45,7 +42,7 @@ int main(int argc, char *argv[])
 
 
 		//// 時間短縮
-		for (int i = 0; i < 297; i++) {
+		for (int i = 0; i < 200; i++) {
 			cap >> frame_BGR;
 		}
 
@@ -89,9 +86,7 @@ int main(int argc, char *argv[])
 			planes.clear();
 
 
-
-			ofs2 << "n_count" << "," << "sum" << std::endl;
-			decoding(luminance, &decode, m, delta, ofs2, embed);
+			decoding(luminance, &decode, m, delta, embed);
 
 			int correct = 0, error = 0;
 			double rate = 0.000;
@@ -130,12 +125,12 @@ int main(int argc, char *argv[])
 			/*	meter.reset();
 			meter.start();*/
 
-		} while (cap.get(CV_CAP_PROP_POS_FRAMES) < 900);
+		} while (cap.get(CV_CAP_PROP_POS_FRAMES) < number_of_frames);
 
 		cap.release();
 
-		//// 復号ビット決定
-		//decide_bit()
 	}
+
+
 	return 0;
 }

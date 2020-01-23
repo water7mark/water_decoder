@@ -73,7 +73,7 @@ bool is_less_than(float i) {
 }
 
 
-void decoding(std::vector<cv::Mat> luminance, std::vector<char>* decode, int m, int delta, std::ofstream& ofs2, const std::vector<char>& embed) {  // luminanceにはmフレームの輝度値が含まれている
+void decoding(std::vector<cv::Mat> luminance, std::vector<char>* decode, int m, int delta, const std::vector<char>& embed) {  // luminanceにはmフレームの輝度値が含まれている
 	std::vector<cv::Mat> means;
 	std::vector<cv::Mat> deviations;
 	cv::Mat m_means = cv::Mat::zeros(1920, 1080, CV_32F);  // mフレームでの"ブロックごとの輝度平均値"の平均値
@@ -115,58 +115,11 @@ void decoding(std::vector<cv::Mat> luminance, std::vector<char>* decode, int m, 
 	std::vector<size_t> n_count;
 	float threshold = 0;
 	delta_thisfile = delta;
-	int flg;
-	int vec_count = 0;
-	int sum_em[4] = {};
-	float temp2 = 0;
-	float average_temp = 0;
-	std::vector<std::vector<int>> sum_all(4, std::vector<int>());
 
-	for (i = 0; i < BG_width * BG_height; i++) { // フレームのすべてのブロックについて標準偏差がδより小さいものの個数をカウントする．
-		//n_count.push_back(std::count_if(vec[i].begin(), vec[i].end(), is_less_than));    // vecの中で，deltaより値が小さいものの個数をカウント
-		for (auto itr = vec[i].begin(); itr != vec[i].end(); itr++) {    // 225回のループ
-			if (*itr - delta >= 0) {
-				flg = 1;
-			}
-			else {
-				flg = -1;
-			}
-
-			if (embed[i] == '0') {
-				if (flg > 0) {
-					sum_em[0]++;
-				}
-				else {          // 正解？
-					sum_em[1]++;
-				}
-			}
-			else {
-				if (flg > 0) {   // 正解?
-					sum_em[2]++;
-				}
-				else {
-					sum_em[3]++;
-				}
-			}
-
-			if (flg < 0) {
-				vec_count++;
-			}
-		}
-
-		n_count.push_back(vec_count);
-		vec_count = 0;
-
-		for (int i = 0; i < 4; i++) {
-			sum_all[i].push_back(sum_em[i]);
-			sum_em[i] = 0;
-		}
-
-		threshold += n_count[i];    // その個数を閾値に加える．
+	for (i = 0; i < BG_width * BG_height; i++) {
+		n_count.push_back(std::count_if(vec[i].begin(), vec[i].end(), is_less_than));
+		threshold += n_count[i];
 	}
-
-	// 参考資料のためのグラフを作るための関数
-	make_graph(ofs2, n_count, sum_all);
 
 	threshold = threshold / (BG_width * BG_height);  // それをブロック群個数で割る．平均化する
 													 // 閾値求め終わり
@@ -180,79 +133,3 @@ void decoding(std::vector<cv::Mat> luminance, std::vector<char>* decode, int m, 
 }
 
 
-void make_graph(std::ofstream& ofs2, std::vector<size_t>& n_count, std::vector<std::vector<int>>(&sum_all)) {
-
-	for (int i = 0; i < n_count.end() - n_count.begin(); i++) {
-		ofs2 << n_count[i] << ",";
-
-
-		for (char j = 0; j < 4; j++) {
-			ofs2 << sum_all[j][i] << ",";
-		}
-
-	}
-
-
-
-	ofs2 << std::endl;
-
-}
-
-//void block_matching(cv::Mat frame1, cv::Mat frame2,  int block_size, cv::Mat motion_vec) {
-//	// frame1からframe2にかけて動きベクトルを求める，それをmotion_vecに格納する
-//	// 
-//
-//	for (int x = 0; x < 1920; x += block_width) {
-//		for (int y = 0; y < 1080; y += block_height) {
-//			frame1.at<unsigned char>(y, x)
-//		}
-//	}
-//
-//
-//}
-
-//void same_checker(cv::Mat frame, int x, int y) {
-//	int bc_width = 0;
-//	int bc_height = 0;
-//
-//	for (int i = x - bc_width + 1; i <= x + bc_width ; i++) {
-//		for (int j = y - bc_height + 1; j <= y + bc_width; i++) {
-//			frame.at<unsigned char>(j, i)
-//		}
-//	}
-//
-//}
-
-//void decide_bit(std::vector<std::vector<std::vector<int>>> all_bit_array, int& result_bit_array, int m, int num_embedframe, int start_frame, int m_set) {
-//	// 復号ビット決定関数	(現状各ビットの多数決で復号ビットを決定する(でもそれだとnum_embedframe個の候補ができてしまってどれを選べばよいかわからない))
-//	// num_embedframe個に分けて格納されたall_bit_array配列のそれぞれのm個の復号ビット列に対する処理である
-//	std::vector<std::vector<int>> temp_result;
-//
-//	for (int k = 0; k < num_embedframe; k++) {       // num_embedframeに分けられているから
-//		for (int i = 0; i < DECODER_BIT; i++) {      // 透かしビット144それぞれに
-//			int mean = 0;
-//			for (int j = 0; j < end(all_bit_array[0]) - begin(all_bit_array[0]); j++) {
-//				mean += all_bit_array[k][j][i];
-//			}
-//			mean /= (end(all_bit_array[0]) - begin(all_bit_array[0]));
-//		}
-//
-//	}
-//}
-
-//void assort(std::vector<char> c_dec_bit, std::vector<std::vector<std::vector<char>>> all_bit_array, int num_embedframe, int cframe, cv::mat dec_bit_array_1) {
-//	// c_dec_bitの復号ビットをdec_bit_arrayの適切なところへ格納する
-//	int cset = cframe / num_embedframe; // mセットのうち，現在のセット番目を格納する
-//	int no_cset;  //　現在のセットの中で何番目に格納されるか
-//
-//	for (int i = 0; i < end(all_bit_array[cset]) - begin(all_bit_array[cset]); i++) {
-//		if (all_bit_array[cset][i][0] == (char)(-1)) {
-//			no_cset = i;
-//			break;
-//		}
-//	}
-//
-//	for (int i = 0; i < DECODER_BIT; i++) {       // 本当はvectorの関数を用いて一気に格納したい
-//		all_bit_array[cset][no_cset].push_back(c_dec_bit[i]);
-//	}
-//}
